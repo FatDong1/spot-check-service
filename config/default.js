@@ -1,9 +1,9 @@
 const config = {
   // 启动端口
-  port: 3000,
+  port: 4010,
   // 数据库配置
   database: {
-    DATABASE: 'checkSql',
+    DATABASE: 'checksql',
     USERNAME: 'root',
     PASSWORD: '123456',
     PORT: '3306',
