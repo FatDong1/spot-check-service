@@ -28,34 +28,6 @@ let query = function( sql, values ) {
   })
 }
 
-let user =
-  `create table if not exists user(
-    id INT NOT NULL AUTO_INCREMENT,
-    account VARCHAR(40) NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    password VARCHAR(40) NOT NULL,
-    checkType VARCHAR(40) NOT NULL,
-    deviceGroup VARCHAR(40) NOT NULL,
-    PRIMARY KEY (id)
-  )character set = utf8;`
-
-let device =
-  `create table if not exists device(
-    id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
-    group VARCHAR(100) NOT NULL,
-    record VARCHAR(100) NOT NULL,
-    PRIMARY KEY (id)
-  )character set = utf8;`
-
-let createTable = function( sql ) {
-  return query( sql, [] )
-}
-
-// 建表
-createTable(user)
-createTable(device)
-
 module.exports = {
   query
 }

@@ -4,7 +4,7 @@ var bodyParser = require('koa-bodyparser')
 var session = require('koa-session-minimal')
 var MysqlStore = require('koa-mysql-session')
 var config = require('./config/default.js')
-var router=require('koa-router')
+var router = require('./routes/index')
 var app=new Koa()
 
 
@@ -25,7 +25,7 @@ app.use(session({
 app.use(bodyParser())
 
 //  路由
-app.use(require('./routes/user.js').routes())
+router(app)
 
 
 
