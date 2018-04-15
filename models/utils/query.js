@@ -1,7 +1,7 @@
 var mysql = require('mysql');
-var config = require('../config/default.js')
+var config = require('../../config/default.js')
 
-var pool  = mysql.createPool({
+var pool = mysql.createPool({
   host     : config.database.HOST,
   user     : config.database.USERNAME,
   password : config.database.PASSWORD,
@@ -15,7 +15,6 @@ let query = function( sql, values ) {
         resolve( err )
       } else {
         connection.query(sql, values, ( err, rows) => {
-
           if ( err ) {
             reject( err )
           } else {

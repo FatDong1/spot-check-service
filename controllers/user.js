@@ -7,11 +7,11 @@ async function addUser (ctx, next) {
     name: ctx.request.body.name,
     account: ctx.request.body.account,
     password: ctx.request.body.password,
-    checkType: ctx.request.body.checkType,
-    deviceGroup: ctx.request.body.deviceGroup
+    sex: ctx.request.body.sex,
+    plant: ctx.request.body.plant,
+    factory: ctx.request.body.factory
   }
-
-  await userModel.insertData([user.name, md5(user.password), user.checkType, user.deviceGroup, user.account])
+  await userModel.insertData([user.name, md5(user.password), user.sex, user.account, user.factory, user.plant])
     .then(() => {
       ctx.body = {
         code: 0,

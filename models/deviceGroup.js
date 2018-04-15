@@ -1,4 +1,4 @@
-let query = require('./query').query
+let query = require('./utils/query').query
 
 
 let devicegGroupTable =
