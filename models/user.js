@@ -1,4 +1,5 @@
 let query = require('./utils/query').query
+let md5 = require('md5')
 
 let userTable =
 `create table if not exists user(
@@ -9,6 +10,7 @@ let userTable =
   password VARCHAR(50) NOT NULL,
   factory VARCHAR(30) NOT NULL,
   plant VARCHAR(30) NOT NULL,
+  isAdmin TINYINT(10) DEFAULT 0,
   PRIMARY KEY (account)
 )character set = utf8;`
 
@@ -34,7 +36,7 @@ let findUserByAccount = function (account) {
 }
 
 // 模糊查找
-let findUserByNameBlur = function (  name ) {
+let findUserByNameBlur = function ( name ) {
   let _sql = `SELECT * from user where name LIKE "%${name}%"`
   return query( _sql)
 }
@@ -53,19 +55,19 @@ let findNumber = function () {
 
 // 更新用户数据
 let updateUser = function (value) {
-  let _sql = `UPDATE user SET name=?, account=?, checkType=?, deviceGroup=? WHERE id=?`
+  let _sql = `UPDATE user SET password=? WHERE account=?`
   return query(_sql, value)
 }
 
 // 初始化数据
 findNumber().then((result) => {
   if (result[0].number == 0) {
-    insertData(['小明','123456', 1, 'xiaoming', '第一工厂', '第一车间'])
-    insertData(['小红','123456', 2, 'xiaohong', '第一工厂', '第二车间'])
-    insertData(['小白','123456', 1, 'xiaobai', '第二工厂', '第二车间'])
-    insertData(['小东','123456', 1, 'xiaodong', '第二工厂', '第一车间'])
-    insertData(['小龙','123456', 2, 'xiaolong', '第三工厂', '第一车间'])
-    insertData(['小陈','123456', 2, 'xiaochen', '第三工厂', '第二车间'])
+    insertData(['小明',md5('123456'), 1, 'xiaoming', '第一工厂', '第一车间'])
+    insertData(['小红',md5('123456'), 2, 'xiaohong', '第一工厂', '第二车间'])
+    insertData(['小白',md5('123456'), 1, 'xiaobai', '第二工厂', '第二车间'])
+    insertData(['小东',md5('123456'), 1, 'xiaodong', '第二工厂', '第一车间'])
+    insertData(['小龙',md5('123456'), 2, 'xiaolong', '第三工厂', '第一车间'])
+    insertData(['小陈',md5('123456'), 2, 'xiaochen', '第三工厂', '第二车间'])
   }
 })
 

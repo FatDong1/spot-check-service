@@ -52,14 +52,33 @@ async function getAllUsers (ctx) {
   })
 }
 
-// 根据用户名查找用户
-async function searchUsers (ctx) {
-  await userModel.findUserByNameBlur(ctx.query.name).then((result) => {
+// 检查用户密码
+async function checkUser (ctx) {
+  let account = ctx.request.body.account
+  let password = ctx.request.body.password
+  await userModel.findUserByAccount(account).then((result) => {
     if (result.length) {
+      if (md5(password) === result[0].password) {
+        ctx.body = {
+          code: 0,
+          data: {
+            msg: '登录成功',
+            value: result
+          }
+        }
+      } else {
+        ctx.body = {
+          code: -1,
+          data: {
+            msg: '密码错误'
+          }
+        }
+      }
+    } else {
       ctx.body = {
-        code: 0,
+        code: -1,
         data: {
-          value: result
+          msg: '用户不存在'
         }
       }
     }
@@ -69,7 +88,6 @@ async function searchUsers (ctx) {
 // 删除用户
 async function deleteUser (ctx) {
   await userModel.deleteUserById(ctx.query.id).then((result) => {
-    console.log(result)
     ctx.body = {
       code: 0,
       data: {
@@ -94,26 +112,30 @@ async function deleteUser (ctx) {
 
 // 更新用户数据
 async function updateUser (ctx) {
-  let value = [ctx.request.body.name, ctx.request.body.account, ctx.request.body.checkType, ctx.request.body.deviceGroup,ctx.request.body.id]
-  await userModel.updateUser(value).then((data) => {
+  let account = ctx.request.body.account
+  let password = ctx.request.body.password
+
+  await userModel.findUserByAccount(account).then((result) => {
+    if (result.length === 0) {
+      ctx.body = {
+        code: -1,
+        data: {
+          msg: '用户不存在'
+        }
+      }
+      return
+    }
+  })
+  await userModel.updateUser([md5(password), account]).then(() => {
     ctx.body = {
       code: 0,
       data: {
-        msg: '更新用户成功'
+        msg: '用户密码修改成功'
       }
     }
-  }).catch((err) => {
-    let msg
-    if (err.code === 'ER_DUP_ENTRY') {
-      msg = '登录账户已存在'
-    } else {
-      msg = '更新用户失败'
-    }
+  }).catch(() => {
     ctx.body = {
-      code: -1,
-      data: {
-        msg: msg
-      }
+      code: -1
     }
   })
 }
@@ -121,7 +143,7 @@ async function updateUser (ctx) {
 module.exports = {
   addUser,
   getAllUsers,
-  searchUsers,
   deleteUser,
+  checkUser,
   updateUser
 }
