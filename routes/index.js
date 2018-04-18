@@ -1,7 +1,9 @@
 const user = require('./user')
-const deviceGroup = require('./device')
+const device = require('./device')
+const check = require('./check')
 
 module.exports = (app) => {
   app.use(user.routes())
-  app.use(deviceGroup.routes())
+  app.use(device.routes())
+  app.use(check.routes())
 }

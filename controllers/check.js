@@ -1,10 +1,9 @@
-let deviceModel = require('../models/device')
+let checkModel = require('../models/check')
 
-async function addDevice (ctx) {
+async function insertData (ctx) {
   let result = ctx.request.body
-  let department = result.department.join('')
-  let value = [result.name, department, result.category, result.deviceModel, result.serialNumber, result.usePlace, result.productionAddress, result.remark]
-  await deviceModel.addDevice(value).then((result) => {
+  let value = [result.name, result.number, result.element, result.unit, result.special, result.norm, result.cycle, result.checkerId, result.deviceId]
+  await checkModel.addcheck(value).then((result) => {
     ctx.body = {
       code: 0,
       data: {
@@ -22,9 +21,9 @@ async function addDevice (ctx) {
   })
 }
 
-async function findDevicePage (ctx) {
+async function findcheckPage (ctx) {
   let start = (ctx.query.page - 1 ) * 7
-  await deviceModel.findPageDevice([start]).then((result) => {
+  await checkModel.findPagecheck([start]).then((result) => {
     ctx.body = {
       code: 0,
       data: {
@@ -34,9 +33,9 @@ async function findDevicePage (ctx) {
   })
 }
 
-async function findDeviceByDept (ctx) {
+async function findcheckByDept (ctx) {
   let dept = ctx.query.department
-  await deviceModel.findDeviceByDept([dept]).then((result) => {
+  await checkModel.findcheckByDept([dept]).then((result) => {
     ctx.body = {
       code: 0,
       data: {
@@ -53,9 +52,9 @@ async function findDeviceByDept (ctx) {
   })
 }
 
-async function findDeviceByName (ctx) {
+async function findcheckByName (ctx) {
   let name = ctx.query.name
-  await deviceModel.findDeviceByName([name]).then((result) => {
+  await checkModel.findcheckByName([name]).then((result) => {
     ctx.body = {
       code: 0,
       data: {
@@ -73,8 +72,5 @@ async function findDeviceByName (ctx) {
 }
 
 module.exports = {
-  addDevice,
-  findDevicePage,
-  findDeviceByDept,
-  findDeviceByName
+  insertData
 }
