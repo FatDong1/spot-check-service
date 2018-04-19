@@ -2,32 +2,42 @@ let checkModel = require('../models/check')
 
 async function insertData (ctx) {
   let result = ctx.request.body
-  let value = [result.name, result.number, result.element, result.unit, result.special, result.norm, result.cycle, result.checkerId, result.deviceId]
-  await checkModel.addcheck(value).then((result) => {
-    ctx.body = {
-      code: 0,
-      data: {
-        msg: '设备添加成功'
+  let times = result.checkerId.length
+  let createDate = Date.now()
+  for (let i = 0; i < times; i++) {
+    let value = [result.name, result.number, result.element, result.unit, result.special, result.norm,  result.method, result.tool, result.cycle,result.checkerId[i], result.deviceId, createDate, result.startDate]
+    await checkModel.insertData(value).then((result) => {
+      ctx.body = {
+        code: 0,
+        data: {
+          msg: '点检添加成功'
+        }
       }
-    }
-  }).catch((err) => {
-    console.log(err)
-    ctx.body = {
-      code: -1,
-      data: {
-        msg: '设备添加失败'
+    }).catch((err) => {
+      console.log(err)
+      ctx.body = {
+        code: -1,
+        data: {
+          msg: '点检添加失败'
+        }
       }
-    }
-  })
+    })
+  }
 }
 
-async function findcheckPage (ctx) {
-  let start = (ctx.query.page - 1 ) * 7
-  await checkModel.findPagecheck([start]).then((result) => {
+async function findcheckByDevice (ctx) {
+  await checkModel.findcheckByDevice([ctx.query.deviceId]).then((result) => {
     ctx.body = {
       code: 0,
       data: {
         value: result
+      }
+    }
+  }).catch((err) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        value: err
       }
     }
   })
@@ -72,5 +82,6 @@ async function findcheckByName (ctx) {
 }
 
 module.exports = {
-  insertData
+  insertData,
+  findcheckByDevice
 }

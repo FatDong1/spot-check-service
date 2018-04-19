@@ -4,14 +4,14 @@ let md5 = require('md5')
 let userTable =
 `create table if not exists user(
   id VARCHAR(32) NOT NULL,
-  account VARCHAR(30) NOT NULL,
+  account VARCHAR(30) NOT NULL unique,
   sex TINYINT(1) NOT NULL,
   name VARCHAR(30) NOT NULL,
   password VARCHAR(50) NOT NULL,
   factory VARCHAR(30) NOT NULL,
   plant VARCHAR(30) NOT NULL,
   isAdmin TINYINT(10) DEFAULT 0,
-  PRIMARY KEY (account)
+  PRIMARY KEY (id)
 )character set = utf8;`
 
 // 创建用户表
