@@ -8,5 +8,6 @@ router.get('/api/work/expired', workController.findExpiredWork)
 router.get('/api/work/unusual', workController.findUnusualWork)
 router.post('/api/work/solve', workController.solveUnusualWork)
 router.get('/api/work/problem', workController.findProblemByChecker)
+router.get('/api/work/today', workController.findTodayPercent)
 
 module.exports = router

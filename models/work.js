@@ -90,6 +90,11 @@ let findProblemByChecker = function (value) {
   return query(_sql, value)
 }
 
+let findTodayPercent = function (value) {
+  let _sql = `SELECT * from work LEFT JOIN spot_check ON work.spotCheckId = spot_check.id WHERE spot_check.checkerId = ? and work.checkDate = ?`
+  return query(_sql, value)
+}
+
 module.exports={
   findPageWork,
   insertData,
@@ -97,7 +102,8 @@ module.exports={
   findExpiredWork,
   findUnusualWork,
   solveUnusualWork,
-  findProblemByChecker
+  findProblemByChecker,
+  findTodayPercent
 }
 
 
