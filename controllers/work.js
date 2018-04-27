@@ -6,7 +6,7 @@ async function findWorkPage (ctx) {
   let name = ctx.query.name
   let state = ctx.query.state
   let checkerId = ctx.query.checkerId
-  let department = ctx.query.department ? ctx.query.department : []
+  let department = ctx.query.department ? ctx.query.department : ''
   await workModel.findPageWork([checkerId, name, state, department, start]).then((result) => {
     ctx.body = {
       code: 0,

@@ -31,18 +31,20 @@ let findPageWork = function (value) {
     arr.push('work.state = ?')
     params.push(value[2])
   }
-  if (value[3].length !== 0) {
+  if (value[3] !== '') {
     arr.push('device.department = ?')
     params.push(value[3])
   }
   params.push(value[4])
   let str = arr.join(' and ')
   let _sql = `SELECT * FROM work LEFT JOIN spot_check ON spot_check.id = work.spotCheckId LEFT JOIN device ON spot_check.deviceId = device.id WHERE ${str} LIMIT ?,7`
+  console.log(params)
+  console.log(_sql)
   return query(_sql, params)
 }
 
 let findExpiredWork = function (value) {
-  let _sql = `SELECT spot_check.id, spot_check.name, spot_check.number, spot_check.element, spot_check.unit, spot_check.special, spot_check.norm, spot_check.method, spot_check.tool, spot_check.cycle, spot_check.normOptions,  spot_check.deviceState, spot_check.normType, spot_check.startDate, spot_check.createDate, user.name as checker, user.factory, user.plant, work.checkDate FROM work LEFT JOIN spot_check ON spot_check.id = work.spotCheckId LEFT JOIN user ON spot_check.checkerId = user.id WHERE spot_check.deviceId = ? and work.state = 0 and work.checkDate < ?`
+  let _sql = `SELECT spot_check.id, spot_check.number, spot_check.deviceState, spot_check.name, spot_check.number, spot_check.element, spot_check.unit, spot_check.special, spot_check.norm, spot_check.method, spot_check.tool, spot_check.cycle, spot_check.normOptions,  spot_check.deviceState, spot_check.normType, spot_check.startDate, spot_check.createDate, user.name as checker, user.factory, user.plant, work.checkDate FROM work LEFT JOIN spot_check ON spot_check.id = work.spotCheckId LEFT JOIN user ON spot_check.checkerId = user.id WHERE spot_check.deviceId = ? and work.state = 0 and work.checkDate < ?`
   return query(_sql, value)
 }
 

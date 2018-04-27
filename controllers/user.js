@@ -9,9 +9,11 @@ async function addUser (ctx, next) {
     password: ctx.request.body.password,
     sex: ctx.request.body.sex,
     plant: ctx.request.body.plant,
-    factory: ctx.request.body.factory
+    factory: ctx.request.body.factory,
+    job: ctx.request.body.factory,
+    userNumber: ctx.request.body.userNumber
   }
-  await userModel.insertData([user.name, md5(user.password), user.sex, user.account, user.factory, user.plant])
+  await userModel.insertData([user.name, md5(user.password), user.sex, user.account, user.factory, user.plant, user.job, user.userNumber])
     .then(() => {
       ctx.body = {
         code: 0,
@@ -51,6 +53,22 @@ async function getAllUsers (ctx) {
     }
   })
 }
+
+async function findUserPage (ctx) {
+  let start = (ctx.query.page - 1 ) * 7
+  let name = ctx.query.name
+  let factory = ctx.query.factory
+  let plant = ctx.query.plant
+  await userModel.findPageUser([name, factory, plant, start]).then((result) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  })
+}
+
 
 // 检查用户密码
 async function checkUser (ctx) {
@@ -145,5 +163,6 @@ module.exports = {
   getAllUsers,
   deleteUser,
   checkUser,
-  updateUser
+  updateUser,
+  findUserPage
 }
