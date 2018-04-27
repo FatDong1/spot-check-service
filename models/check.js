@@ -2,20 +2,23 @@ let query = require('./utils/query').query
 
 let checkTable =
   `create table if not exists spot_check (
-    id VARCHAR(32) NOT NULL,
+    id VARCHAR(40) NOT NULL,
     name VARCHAR(30) NOT NULL,
     number VARCHAR(30) NOT NULL,
     element VARCHAR(30) NOT NULL,
-    unit VARCHAR(30) NOT NULL,
+    unit VARCHAR(30),
     special VARCHAR(30) NOT NULL,
-    norm VARCHAR(30) NOT NULL,
+    norm VARCHAR(30),
+    normType VARCHAR(10) NOT NULL,
+    normOptions VARCHAR(50),
     method VARCHAR(30) NOT NULL,
     tool VARCHAR(30) NOT NULL,
+    deviceState VARCHAR(30) NOT NULL,
     cycle INT(10) NOT NULL,
     checkerId VARCHAR(30) NOT NULL,
     deviceId VARCHAR(30) NOT NULL,
-    createDate timestamp NOT NULL,
-    startDate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    createDate date NOT NULL,
+    startDate date NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (checkerId) REFERENCES user(id),
     FOREIGN KEY (deviceId) REFERENCES device(id)
@@ -23,19 +26,12 @@ let checkTable =
 
 query(checkTable)
 
-// let procedureSql = 
-//   `delimiter //
-//     create procedure auto_work()
-//     begin
-    //   `INSERT INTO work(spotCheckId) SELECT id FROM spot_check;
-    // end //`
-
-
 let startWorkSql = 
   `create event if not exists auto_event
-    on schedule every 10 second
+    on schedule every 1 day
     on completion preserve enable
     do call auto_work();`
+
 query(startWorkSql)
 
 
@@ -47,13 +43,18 @@ let findNumber = function () {
 
 // 插入数据
 let insertData = function (value) {
- let _sql = `INSERT INTO spot_check(id, name, number, element, unit, special, norm, method, tool, cycle, checkerId, deviceId) VALUES(UUID_SHORT(),?,?,?,?,?,?,?,?,?,?,?)`
+ let _sql = `INSERT INTO spot_check(id, name, number, element, unit, special, norm, normType, normOptions, method, tool, deviceState, cycle, checkerId, deviceId,createDate,startDate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+ return query(_sql, value)
+}
+
+let updateData = function (value) {
+ let _sql = `UPDATE spot_check SET name=?, number=?, element=?, unit=?,special=?, norm=?, normType=?, normOptions=?,method=?, tool=?, deviceState=?, cycle=?, checkerId=?, deviceId=?, createDate=?, startDate=? WHERE id=?`
  return query(_sql, value)
 }
 
 // 根据deviceId筛选
 let findcheckByDevice = function (value) {
-  let _sql = `SELECT spot_check.name, spot_check.number, spot_check.element, spot_check.unit, spot_check.special, spot_check.norm, spot_check.method, spot_check.tool, spot_check.cycle, user.name as checker FROM spot_check LEFT JOIN user ON user.id = spot_check.checkerId WHERE deviceId = ?`
+  let _sql = `SELECT spot_check.id, spot_check.name, spot_check.number, spot_check.element, spot_check.unit, spot_check.special, spot_check.norm, spot_check.method, spot_check.tool, spot_check.cycle, spot_check.normOptions,  spot_check.deviceState, spot_check.normType, spot_check.startDate, spot_check.createDate, user.id as checkerId, user.name as checker FROM spot_check LEFT JOIN user ON user.id = spot_check.checkerId WHERE deviceId = ?`
   return query(_sql, value)
 }
 
@@ -72,5 +73,6 @@ findNumber().then((result) => {
 
 module.exports = {
   insertData,
-  findcheckByDevice
+  findcheckByDevice,
+  updateData
 }

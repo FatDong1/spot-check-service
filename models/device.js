@@ -4,7 +4,7 @@ let query = require('./utils/query').query
 let deviceTable =
   `create table if not exists device(
     id VARCHAR(32) NOT NULL,
-    name VARCHAR(30) NOT NULL,
+    deviceName VARCHAR(30) NOT NULL,
     department VARCHAR(30) NOT NULL,
     category VARCHAR(50) NOT NULL,
     deviceModel VARCHAR(50) NOT NULL,
@@ -25,7 +25,7 @@ let findNumber = function () {
 
 // 插入数据
 let addDevice = function (value) {
- let _sql = `INSERT INTO device(id, name, department, category, deviceModel, serialNumber, usePlace, productionAddress, remark) VALUES(UUID_SHORT(),?,?,?,?,?,?,?,?)`
+ let _sql = `INSERT INTO device(id, deviceName, department, category, deviceModel, serialNumber, usePlace, productionAddress, remark) VALUES(UUID_SHORT(),?,?,?,?,?,?,?,?)`
  return query(_sql, value)
 }
 
@@ -43,7 +43,7 @@ let findDeviceByDept = function (value) {
 
 // 根据设备名称筛选
 let findDeviceByName = function (value) {
-  let _sql = `SELECT * FROM device WHERE name = ?`
+  let _sql = `SELECT * FROM device WHERE deviceName = ?`
   return query(_sql, value)
 }
 

@@ -1,8 +1,8 @@
 var router = require('koa-router')()
 
-var checkController = require('../controllers/work')
+var workController = require('../controllers/work')
 
-// router.post('/api/work', checkController.insertData)
-// router.get('/api/work', checkController.findcheckByDevice)
-
+router.post('/api/work', workController.updateWork)
+router.get('/api/work', workController.findWorkPage)
+router.get('/api/work/expired', workController.findExpiredWork)
 module.exports = router
