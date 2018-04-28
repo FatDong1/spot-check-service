@@ -17,6 +17,21 @@ async function findWorkPage (ctx) {
   })
 }
 
+async function findUnusualWork (ctx) {
+  let start = (ctx.query.page - 1 ) * 7
+  let name = ctx.query.name
+  let isProblem = ctx.query.isProblem
+  let department = ctx.query.department ? ctx.query.department : ''
+  await workModel.findUnusualWork([isProblem, name, department, start]).then((result) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  })
+}
+
 async function findExpiredWork (ctx) {
   let deviceId = ctx.query.deviceId
   let date = new Date()
@@ -64,8 +79,31 @@ async function updateWork (ctx) {
   })
 }
 
+async function solveUnusualWork (ctx) {
+  let body = ctx.request.body
+  await workModel.solveUnusualWork([body.reason, body.solution, body.id]).then((result) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        msg: '工单解决成功'
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '工单解决失败'
+      }
+    }
+  })
+}
+
+
 module.exports = {
   findWorkPage,
   updateWork,
-  findExpiredWork
+  findExpiredWork,
+  findUnusualWork,
+  solveUnusualWork
 }
