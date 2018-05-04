@@ -58,6 +58,25 @@ async function findExpiredWork (ctx) {
   })
 }
 
+async function findProblemByChecker (ctx) {
+  let checkerId = ctx.query.checkerId
+  await workModel.findProblemByChecker([checkerId]).then((result) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '获取失败'
+      }
+    }
+  })
+}
 
 async function updateWork (ctx) {
   let body = ctx.request.body
@@ -105,5 +124,6 @@ module.exports = {
   updateWork,
   findExpiredWork,
   findUnusualWork,
-  solveUnusualWork
+  solveUnusualWork,
+  findProblemByChecker
 }

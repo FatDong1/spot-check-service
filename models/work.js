@@ -85,13 +85,19 @@ let solveUnusualWork = function (value) {
   return query(_sql, value)
 }
 
+let findProblemByChecker = function (value) {
+  let _sql = `SELECT problem from work LEFT JOIN spot_check ON work.spotCheckId = spot_check.id WHERE spot_check.checkerId = ? and isProblem != 1`
+  return query(_sql, value)
+}
+
 module.exports={
   findPageWork,
   insertData,
   updateWork,
   findExpiredWork,
   findUnusualWork,
-  solveUnusualWork
+  solveUnusualWork,
+  findProblemByChecker
 }
 
 
