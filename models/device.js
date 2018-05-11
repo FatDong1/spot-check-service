@@ -12,6 +12,7 @@ let deviceTable =
     usePlace VARCHAR(50) NOT NULL,
     productionAddress VARCHAR(50) NOT NULL,
     remark VARCHAR(100) NOT NULL,
+    parts VARCHAR(100) NULL,
     PRIMARY KEY (id)
   )character set = utf8;`
 
@@ -25,7 +26,7 @@ let findNumber = function () {
 
 // 插入数据
 let addDevice = function (value) {
- let _sql = `INSERT INTO device(id, deviceName, department, category, deviceModel, serialNumber, usePlace, productionAddress, remark) VALUES(UUID_SHORT(),?,?,?,?,?,?,?,?)`
+ let _sql = `INSERT INTO device(id, deviceName, department, category, deviceModel, serialNumber, usePlace, productionAddress, remark,parts) VALUES(UUID_SHORT(),?,?,?,?,?,?,?,?,?)`
  return query(_sql, value)
 }
 
@@ -50,7 +51,7 @@ let findDeviceByName = function (value) {
 // 初始化数据
 findNumber().then((result) => {
   if (result[0].number == 0) {
-    addDevice(['MJ-1000数控车床','第一工厂第一车间', '数控车床', 'QTN200IIML/500', '34533465436', '第一工厂第一车间','宁夏MAZAK', '加工范围/MM：φ276*230*575,主轴转速：5000/动力头转速：4000,定位精度：0.004,加工精度：0.005'])
+    addDevice(['MJ-1000数控车床','第一工厂第一车间', '数控车床', 'QTN200IIML/500', '34533465436', '第一工厂第一车间','宁夏MAZAK', '加工范围/MM：φ276*230*575,主轴转速：5000/动力头转速：4000,定位精度：0.004,加工精度：0.005',])
     addDevice(['CNC车床','第二工厂第一车间', '普通车床', 'QTN200IIL/500', '567567658658', '第一工厂第二车间','宁夏MAZAK', '加工范围/MM：φ276*230*575,主轴转速：5000/动力头转速：4000,定位精度：0.004,加工精度：0.005'])   
     addDevice(['MJ-900数控车床','第一工厂第一车间', '数控车床', 'QTN200IIML/500', '34533465436', '第而工厂第一车间','宁夏MAZAK', '加工范围/MM：φ276*230*575,主轴转速：5000/动力头转速：4000,定位精度：0.004,加工精度：0.005'])
     addDevice(['MJ-800数控车床','第一工厂第一车间', '数控车床', 'QTN200IIML/500', '34533465436', '第三工厂第一车间','宁夏MAZAK', '加工范围/MM：φ276*230*575,主轴转速：5000/动力头转速：4000,定位精度：0.004,加工精度：0.005'])

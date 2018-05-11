@@ -3,7 +3,7 @@ let deviceModel = require('../models/device')
 async function addDevice (ctx) {
   let result = ctx.request.body
   let department = result.department.join('')
-  let value = [result.name, department, result.category, result.deviceModel, result.serialNumber, result.usePlace, result.productionAddress, result.remark]
+  let value = [result.name, department, result.category, result.deviceModel, result.serialNumber, result.usePlace, result.productionAddress, result.remark,result.parts]
   await deviceModel.addDevice(value).then((result) => {
     ctx.body = {
       code: 0,
