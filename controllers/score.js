@@ -13,7 +13,28 @@ async function insertData (ctx) {
   })
 }
 
+async function findScores (ctx) {
+  let checkerId = ctx.query.checkerId
+  await scoreModel.findScores([checkerId]).then((result) => {
+    console.log(result)
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '获取失败'
+      }
+    }
+  })
+}
 
 module.exports = {
-  insertData
+  insertData,
+  findScores
 }

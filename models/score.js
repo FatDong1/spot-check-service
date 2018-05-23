@@ -24,10 +24,14 @@ let insertData = function( value ) {
   return query( _sql, value )
 }
 
-
+let findScores = function (value) {
+  let _sql = `SELECT total, assessDate from score WHERE score.userId = ?`
+  return query(_sql, value)
+}
 
 module.exports={
-  insertData
+  insertData,
+  findScores
 }
 
 

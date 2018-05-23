@@ -58,6 +58,32 @@ async function findExpiredWork (ctx) {
   })
 }
 
+async function findExpiredWorkPerson (ctx) {
+  let checkerId = ctx.query.checkerId
+  let date = new Date()
+  let year = date.getFullYear()
+  let month = date.getMonth()
+  let day = date.getDate()
+  let current = new Date(year, month, day, 0, 0, 0)
+  await workModel.findExpiredWorkPerson([checkerId, current]).then((result) => {
+    console.log(result)
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '获取失败'
+      }
+    }
+  })
+}
+
 async function findTodayPercent (ctx) {
   let checkerId = ctx.query.checkerId
   let date = new Date()
@@ -68,6 +94,26 @@ async function findTodayPercent (ctx) {
 
   await workModel.findTodayPercent([checkerId, current]).then((result) => {
     console.log(result)
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '获取失败'
+      }
+    }
+  })
+}
+
+async function findWorkBySpid (ctx) {
+  let id = ctx.query.id
+  await workModel.findWorkBySpid([id]).then((result) => {
     ctx.body = {
       code: 0,
       data: {
@@ -125,6 +171,26 @@ async function updateWork (ctx) {
   })
 }
 
+async function findWorkByChecker (ctx) {
+  let checkerId = ctx.query.checkerId
+  await workModel.findWorkByChecker([checkerId]).then((result) => {
+    ctx.body = {
+      code: 0,
+      data: {
+        value: result
+      }
+    }
+  }).catch((err) => {
+    console.log(err)
+    ctx.body = {
+      code: -1,
+      data: {
+        msg: '获取失败'
+      }
+    }
+  })
+}
+
 async function solveUnusualWork (ctx) {
   let body = ctx.request.body
   await workModel.solveUnusualWork([body.reason, body.solution, body.id]).then((result) => {
@@ -153,5 +219,8 @@ module.exports = {
   findUnusualWork,
   solveUnusualWork,
   findProblemByChecker,
-  findTodayPercent
+  findTodayPercent,
+  findExpiredWorkPerson,
+  findWorkBySpid,
+  findWorkByChecker
 }

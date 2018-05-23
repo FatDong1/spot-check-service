@@ -47,6 +47,11 @@ let findExpiredWork = function (value) {
   return query(_sql, value)
 }
 
+let findExpiredWorkPerson = function (value) {
+  let _sql = `SELECT spot_check.name, spot_check.element, spot_check.tool, user.name as checker, device.deviceName, work.checkDate FROM work LEFT JOIN spot_check ON spot_check.id = work.spotCheckId  LEFT JOIN device ON spot_check.deviceId = device.id LEFT JOIN user ON spot_check.checkerId = user.id WHERE spot_check.checkerId = ? and work.state = 0 and work.checkDate < ?`
+  return query(_sql, value)
+}
+
 let findUnusualWork = function (value) {
   let params = []
   let arr = ['work.isProblem != 1']
@@ -90,6 +95,16 @@ let findProblemByChecker = function (value) {
   return query(_sql, value)
 }
 
+let findWorkBySpid = function (value) {
+  let _sql = `SELECT device.deviceName, spot_check.name, spot_check.element, spot_check.normOptions, work.result, spot_check.normType, spot_check.unit, work.checkDate from work LEFT JOIN spot_check ON work.spotCheckId = spot_check.id LEFT JOIN device ON spot_check.deviceId = device.id WHERE spot_check.id = ? and work.state = 1`
+  return query(_sql, value)
+}
+
+let findWorkByChecker = function (value) {
+  let _sql = `SELECT work.checkDate from work LEFT JOIN spot_check ON work.spotCheckId = spot_check.id LEFT JOIN device ON spot_check.deviceId = device.id WHERE spot_check.checkerId = ? and work.state = 1 and work.isProblem = 2`
+  return query(_sql, value)
+}
+
 let findTodayPercent = function (value) {
   let _sql = `SELECT * from work LEFT JOIN spot_check ON work.spotCheckId = spot_check.id WHERE spot_check.checkerId = ? and work.checkDate = ?`
   return query(_sql, value)
@@ -103,7 +118,10 @@ module.exports={
   findUnusualWork,
   solveUnusualWork,
   findProblemByChecker,
-  findTodayPercent
+  findTodayPercent,
+  findExpiredWorkPerson,
+  findWorkBySpid,
+  findWorkByChecker
 }
 
 
